@@ -1,0 +1,16 @@
+#!/bin/sh
+cd /sys/class/leds/asus::kbd_backlight/
+if [ "$1" = "inc" ]; then
+  CURRENT=`cat /sys/class/leds/asus::kbd_backlight/brightness`
+  TO=`expr ${CURRENT} + 1`
+  echo "${TO}" | sudo /usr/bin/tee /sys/class/leds/asus::kbd_backlight/brightness
+elif [ "$1" = "dec" ]; then
+  CURRENT=`cat /sys/class/leds/asus::kbd_backlight/brightness`
+  TO=`expr ${CURRENT} - 1`
+  echo "${TO}" | sudo /usr/bin/tee /sys/class/leds/asus::kbd_backlight/brightness
+elif [ "${1}" = "set" ]; then
+  #CURRENT=`cat /sys/class/leds/asus::kbd_backlight/brightness`
+  echo "${2}" | sudo /usr/bin/tee /sys/class/leds/asus::kbd_backlight/brightness
+else
+  echo 'give me inc or dec'
+fi

@@ -1,0 +1,23 @@
+#!/bin/sh
+if [ "$1" = "inc" ]; then
+  cd /sys/class/backlight/intel_backlight/
+  CURRENT=`cat /sys/class/backlight/intel_backlight/actual_brightness`
+  TO=`expr ${CURRENT} + 100`
+#  echo "${CURRENT} + 100 = ${TO}"
+  echo "${TO}" | sudo /usr/bin/tee /sys/class/backlight/intel_backlight/brightness
+elif [ "$1" = "dec" ]; then
+  echo dec
+  cd /sys/class/backlight/intel_backlight/
+  CURRENT=`cat /sys/class/backlight/intel_backlight/actual_brightness`
+  TO=`expr ${CURRENT} - 100`
+#  echo "${CURRENT} - 100 = ${TO}"
+  echo "${TO}" | sudo /usr/bin/tee /sys/class/backlight/intel_backlight/brightness
+elif [ "${1}" = "set" ]; then
+  echo "set ${2}"
+  cd /sys/class/backlight/intel_backlight/
+  CURRENT=`cat /sys/class/backlight/intel_backlight/actual_brightness`
+#  echo "${CURRENT} -> ${2}"
+  echo "${2}" | sudo /usr/bin/tee /sys/class/backlight/intel_backlight/brightness
+else
+  echo 'give me inc or dec'
+fi
