@@ -1,4 +1,4 @@
--- Standard awesome library
+-- Standars awesome library
 local gears = require("gears")
 local awful = require("awful")
 awful.rules = require("awful.rules")
@@ -10,6 +10,7 @@ local beautiful = require("beautiful")
 -- Notification library
 local naughty = require("naughty")
 local menubar = require("menubar")
+local battery_widget = require("battery-widget")
 
 -- Load Debian menu entries
 require("debian.menu")
@@ -58,18 +59,18 @@ modkey = "Mod4"
 -- Table of layouts to cover with awful.layout.inc, order matters.
 local layouts =
 {
-    awful.layout.suit.floating,
     awful.layout.suit.tile,
-    awful.layout.suit.tile.left,
-    awful.layout.suit.tile.bottom,
-    awful.layout.suit.tile.top,
-    awful.layout.suit.fair,
-    awful.layout.suit.fair.horizontal,
-    awful.layout.suit.spiral,
-    awful.layout.suit.spiral.dwindle,
-    awful.layout.suit.max,
-    awful.layout.suit.max.fullscreen,
-    awful.layout.suit.magnifier
+    awful.layout.suit.floating
+--    awful.layout.suit.tile.left,
+--    awful.layout.suit.tile.bottom,
+--    awful.layout.suit.tile.top,
+--    awful.layout.suit.fair,
+--    awful.layout.suit.fair.horizontal,
+--    awful.layout.suit.spiral,
+--    awful.layout.suit.spiral.dwindle,
+--    awful.layout.suit.max,
+--    awful.layout.suit.max.fullscreen,
+ --   awful.layout.suit.magnifier
 }
 -- }}}
 
@@ -93,14 +94,14 @@ end
 -- {{{ Menu
 -- Create a laucher widget and a main menu
 myawesomemenu = {
-   { "manual", terminal .. " -e man awesome" },
-   { "edit config", editor_cmd .. " " .. awesome.conffile },
-   { "restart", awesome.restart },
+--   { "manual", terminal .. " -e man awesome" },
+--   { "edit config", editor_cmd .. " " .. awesome.conffile },
+--   { "restart", awesome.restart },
    { "quit", awesome.quit }
 }
 
 mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
-                                    { "Debian", debian.menu.Debian_menu.Debian },
+--                                    { "Debian", debian.menu.Debian_menu.Debian },
                                     { "open terminal", terminal }
                                   }
                         })
@@ -115,6 +116,8 @@ menubar.utils.terminal = terminal -- Set the terminal for applications that requ
 -- {{{ Wibox
 -- Create a textclock widget
 mytextclock = awful.widget.textclock()
+
+battery = battery_widget({adapter = "BAT0"})
 
 -- Create a wibox for each screen and add it
 mywibox = {}
@@ -195,6 +198,7 @@ for s = 1, screen.count() do
     -- Widgets that are aligned to the right
     local right_layout = wibox.layout.fixed.horizontal()
     if s == 1 then right_layout:add(wibox.widget.systray()) end
+    right_layout:add(battery.widget)
     right_layout:add(mytextclock)
     right_layout:add(mylayoutbox[s])
 
@@ -218,6 +222,14 @@ root.buttons(awful.util.table.join(
 
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
+    -- Brightness
+
+    awful.key({ }, "XF86MonBrightnessDown", function () awful.util.spawn("asus-brightness dec") end),
+    awful.key({ }, "XF86MonBrightnessUp", function () awful.util.spawn("asus-brightness inc") end),
+    awful.key({ }, "XF86KbdBrightnessDown", function () awful.util.spawn("asus-ledkeyboard dec") end),
+    awful.key({ }, "XF86KbdBrightnessUp", function () awful.util.spawn("asus-ledkeyboard inc") end),
+
+
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
     awful.key({ modkey,           }, "Right",  awful.tag.viewnext       ),
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore),
@@ -257,9 +269,6 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "h",     function () awful.tag.incmwfact(-0.05)    end),
     awful.key({ modkey, "Shift"   }, "h",     function () awful.tag.incnmaster( 1)      end),
     awful.key({ modkey, "Shift"   }, "l",     function () awful.tag.incnmaster(-1)      end),
-    awful.key({ modkey, "Control" }, "h",     function () awful.tag.incncol( 1)         end),
-    awful.key({ modkey, "Control" }, "l",     function () awful.tag.incncol(-1)         end),
-    awful.key({ modkey,           }, "space", function () awful.layout.inc(layouts,  1) end),
     awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(layouts, -1) end),
 
     awful.key({ modkey, "Control" }, "n", awful.client.restore),
@@ -434,6 +443,9 @@ client.connect_signal("manage", function (c, startup)
         local middle_layout = wibox.layout.flex.horizontal()
         local title = awful.titlebar.widget.titlewidget(c)
         title:set_align("center")
+        middle_layout:add(title)
+        middle_layout:buttons(buttons)
+
         middle_layout:add(title)
         middle_layout:buttons(buttons)
 
