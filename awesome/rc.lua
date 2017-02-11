@@ -236,6 +236,14 @@ root.buttons(awful.util.table.join(
 
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
+
+    
+    awful.key({  }, "XF86MonBrightnessDown", function () awful.util.spawn("asus-brightness dec") end, {description="", group="client"} ),
+    awful.key({  }, "XF86MonBrightnessUp",   function () awful.util.spawn("asus-brightness inc") end, {description="", group="client"} ),
+    
+    awful.key({  }, "XF86KbdBrightnessDown", function () awful.util.spawn("asus-ledkeyboard dec") end, {description="", group="client"} ),
+    awful.key({  }, "XF86KbdBrightnessUp",   function () awful.util.spawn("asus-ledkeyboard inc") end, {description="", group="client"} ),
+    
     awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
               {description="show help", group="awesome"}),
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev,
