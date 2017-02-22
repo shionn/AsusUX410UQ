@@ -10,6 +10,8 @@ local beautiful = require("beautiful")
 local naughty = require("naughty")
 local menubar = require("menubar")
 local hotkeys_popup = require("awful.hotkeys_popup").widget
+local battery_widget = require("battery-widget")
+--local volume_widget = require("volume-control")
 
 -- Load Debian menu entries
 require("debian.menu")
@@ -47,6 +49,11 @@ beautiful.init(awful.util.get_themes_dir() .. "default/theme.lua")
 terminal = "x-terminal-emulator"
 editor = os.getenv("EDITOR") or "editor"
 editor_cmd = terminal .. " -e " .. editor
+
+-- battey
+battery = battery_widget({ adapter = "BAT0" })
+-- volume
+-- volume = volume_widget({})
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -216,6 +223,8 @@ awful.screen.connect_for_each_screen(function(s)
         },
         s.mytasklist, -- Middle widget
         { -- Right widgets
+	    battery.widget,
+	    --volume.widget,
             layout = wibox.layout.fixed.horizontal,
             mykeyboardlayout,
             wibox.widget.systray(),
@@ -243,6 +252,10 @@ globalkeys = awful.util.table.join(
     
     awful.key({  }, "XF86KbdBrightnessDown", function () awful.util.spawn("asus-ledkeyboard dec") end, {description="", group="client"} ),
     awful.key({  }, "XF86KbdBrightnessUp",   function () awful.util.spawn("asus-ledkeyboard inc") end, {description="", group="client"} ),
+
+    awful.key({ }, "XF86AudioRaiseVolume", function () awful.util.spawn("amixer set Master 2%+") end, { description="", group="client"}),
+    awful.key({ }, "XF86AudioLowerVolume", function () awful.util.spawn("amixer set Master 2%-") end, { description="", group="client"}),
+    awful.key({ }, "XF86AudioMute", function () awful.util.spawn("amixer set Master toggle") end, { description="", group="client"}),
     
     awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
               {description="show help", group="awesome"}),
@@ -478,7 +491,7 @@ awful.rules.rules = {
 
     -- Add titlebars to normal clients and dialogs
     { rule_any = {type = { "normal", "dialog" }
-      }, properties = { titlebars_enabled = true }
+      }, properties = { titlebars_enabled = false }
     },
 
     -- Set Firefox to always map on the tag named "2" on screen 1.
