@@ -1,0 +1,5 @@
+shionn	ALL = NOPASSWD: /sbin/ifconfig [a-z0-9 ]*
+shionn	ALL = NOPASSWD: /sbin/wpa_supplicant [-a-zA-Z0-9 ]*
+shionn	ALL = NOPASSWD: /sbin/dhclient [a-z0-9 ]*
+shionn	ALL = NOPASSWD: /sbin/iwconfig [-a-zA-Z0-9 "]*
+shionn	ALL = NOPASSWD: /usr/bin/killall wpa_supplicant
