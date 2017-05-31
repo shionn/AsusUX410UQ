@@ -1,1 +1,40 @@
-../../../.bin/wifi
+#! /bin/bash
+
+#interface = wlan0
+#interface = wlp2s0
+
+sudo ifconfig wlp2s0 down
+sudo killall wpa_supplicant
+
+if [[ $# -eq 0 || $1 == home ]]; then
+  sudo ifconfig wlp2s0 up
+  sudo wpa_supplicant -Dwext -iwlp2s0 -c/home/shionn/.wpa/AF32.conf -B
+  sudo dhclient wlp2s0
+elif [[ $1 == mb ]]; then
+  sudo ifconfig wlp2s0 up
+  sudo wpa_supplicant -Dwext -iwlp2s0 -c/home/shionn/.wpa/MB.conf -B
+  sudo dhclient wlp2s0
+elif [[ $1 == s4 ]]; then
+  sudo ifconfig wlp2s0 up
+  sudo wpa_supplicant -Dwext -iwlp2s0 -c/home/shionn/.wpa/S4.conf -B
+  sudo dhclient wlp2s0
+elif [[ $1 == maman ]]; then
+  sudo ifconfig wlp2s0 up
+  sudo wpa_supplicant -Dwext -iwlp2s0 -c/home/shionn/.wpa/maman.conf -B
+  sudo dhclient wlp2s0
+elif [[ $1 == domi ]]; then
+  sudo ifconfig wlp2s0 up
+  sudo wpa_supplicant -Dwext -iwlp2s0 -c/home/shionn/.wpa/domi.conf -B
+  sudo dhclient wlp2s0
+elif [[ $1 == mitch ]]; then
+  sudo ifconfig wlp2s0 up
+  sudo wpa_supplicant -Dwext -iwlp2s0 -c/home/shionn/.wpa/mitch.conf -B
+  sudo dhclient wlp2s0
+elif [[ $1 == amnesie ]]; then
+  sudo ifconfig wlp2s0 up
+  sudo iwconfig wlp2s0 essid "AMNESIE_CLIENTS"
+  sudo iwconfig wlp2s0 mode Managed
+  sudo dhclient wlp2s0
+fi
+
+echo done
