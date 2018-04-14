@@ -1,4 +1,5 @@
 #!/bin/bash
+# necessite imagemagic si import n'est pas trouvé
 timestamp="$(date +%d.%m.%Y"_shot_"%H:%M:%S)"
 targetbase="$HOME/pictures/screenshots"
 mkdir -p $targetbase
